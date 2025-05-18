@@ -70,7 +70,7 @@ static void cb_okbutton(Fl_Widget *widget, void *data)
 static bool ejectCDROM(void)
 {
 	int drive;
-	if ((drive = open("/dev/sr0", O_RDONLY | O_NONBLOCK)) == -1 || (drive = open("/dev/cdrom", O_RDONLY | O_NONBLOCK)) == -1) {
+	if ((drive = open("/dev/sr0", O_RDONLY | O_NONBLOCK)) == -1 && (drive = open("/dev/cdrom", O_RDONLY | O_NONBLOCK)) == -1) {
 		return false;
 	} else if (ioctl(drive, CDROMEJECT) != 0) {
 		close(drive);
