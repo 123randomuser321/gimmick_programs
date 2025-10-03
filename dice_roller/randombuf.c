@@ -27,6 +27,8 @@
 #define LINUX_RANDOM
 #include <sys/random.h>
 #include <stdio.h>
+#else
+#err "Unrecognized OS. Pass NO_SYSTEM_RANDOM=1 (i.e. make NO_SYSTEM_RANDOM=1 [...]) to build."
 #endif
 #else
 #include <time.h>
