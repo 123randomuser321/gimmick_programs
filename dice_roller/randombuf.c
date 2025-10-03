@@ -56,10 +56,10 @@ void fillrandombuf(void *buf, size_t bufsize)
 		res = rand();
 		seed += res;
 		if (bufsize - offset > sizeof(int)) {
-			strncpy((char *) buf + offset, (char *) &res, sizeof(int));
+			memcpy((char *) buf + offset, (char *) &res, sizeof(int));
 			offset += sizeof(int);
 		} else {
-			strncpy((char *) buf + offset, (char *) &res, bufsize - offset);
+			memcpy((char *) buf + offset, (char *) &res, bufsize - offset);
 			offset = bufsize;
 		}
 	}
