@@ -3,3 +3,4 @@ free_cupholder/free_cupholder_linux
 *.o
 *.a
 dice_roller/dice_roller*
+.vscode/
