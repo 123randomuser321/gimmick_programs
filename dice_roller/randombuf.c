@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #else
-#err "Unrecognized OS. Pass NO_SYSTEM_RANDOM=1 (i.e. make NO_SYSTEM_RANDOM=1 [...]) to build."
+#error "Unrecognized OS. Pass NO_SYSTEM_RANDOM=1 (i.e. make NO_SYSTEM_RANDOM=1 [...]) to build."
 #endif
 #else
 #include <time.h>
@@ -65,7 +65,7 @@ void fillrandombuf(void *buf, size_t bufsize)
 {
 	#ifdef LINUX_RANDOM
 	if (getrandom(buf, bufsize, 0) == -1) // this also supresses a warning
-		fprintf(stderr, "%s:%u%s: getrandom() error.", __FILE__, __LINE__, __func__);
+		fprintf(stderr, "%s:%u:%s: getrandom() error.\n", __FILE__, __LINE__, __func__);
 	#elif defined(MSWIN_RANDOM)
 	if (bSetupDone == FALSE && alg == NULL) {
 		NTSTATUS err = BCryptOpenAlgorithmProvider(&alg, BCRYPT_RNG_ALGORITHM, MS_PRIMITIVE_PROVIDER, 0);
