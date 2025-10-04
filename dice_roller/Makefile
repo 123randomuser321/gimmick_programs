@@ -24,13 +24,15 @@ ifneq ($(DEBUG),)
 endif
 
 LIBFLAGS = -L./Fl -lFl -lm
-override LDFLAGS += $(shell fltk-config --use-images --ldstaticflags) $(LIBFLAGS)
 
 ifeq ($(PLATFORM), win32)
 	EXESUFFIX = .exe
+	LIBFLAGS += -lbcrypt
 else
 	EXESUFFIX =
 endif
+
+override LDFLAGS += $(shell fltk-config --use-images --ldstaticflags) $(LIBFLAGS)
 
 ifneq ($(NO_SYSTEM_RANDOM),)
 	DEFINES = -D NO_SYSTEM_RANDOM=1
