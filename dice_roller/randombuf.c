@@ -27,6 +27,14 @@
 #define LINUX_RANDOM
 #include <sys/random.h>
 #include <stdio.h>
+#elif defined(__WIN32)
+#define MSWIN_RANDOM
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <ntstatus.h>
+#include <bcrypt.h>
+#include <stdio.h>
+#include <stdlib.h>
 #else
 #err "Unrecognized OS. Pass NO_SYSTEM_RANDOM=1 (i.e. make NO_SYSTEM_RANDOM=1 [...]) to build."
 #endif
@@ -39,6 +47,18 @@
 /* Internal headers */
 #include "randombuf.h"
 
+/* Windows stuff */
+#ifdef MSWIN_RANDOM
+static BCRYPT_ALG_HANDLE alg = NULL;
+static BOOL bSetupDone = FALSE;
+
+static void CloseALG(void)
+{
+	BCryptCloseAlgorithmProvider(alg, 0);
+	return;
+}
+#endif
+
 /* Function definitions */
 
 void fillrandombuf(void *buf, size_t bufsize)
@@ -46,6 +66,16 @@ void fillrandombuf(void *buf, size_t bufsize)
 	#ifdef LINUX_RANDOM
 	if (getrandom(buf, bufsize, 0) == -1) // this also supresses a warning
 		fprintf(stderr, "%s:%u%s: getrandom() error.", __FILE__, __LINE__, __func__);
+	#elif defined(MSWIN_RANDOM)
+	if (bSetupDone == FALSE && alg == NULL) {
+		NTSTATUS err = BCryptOpenAlgorithmProvider(&alg, BCRYPT_RNG_ALGORITHM, MS_PRIMITIVE_PROVIDER, 0);
+		if (err != STATUS_SUCCESS)
+			fprintf(stderr, "%s:%u:%s: BCryptOpenAlgorithmProvider() error: %d\n", __FILE__, __LINE__, __func__, err);
+		else
+			atexit(CloseALG);
+		bSetupDone = TRUE;
+	}
+	BCryptGenRandom(alg, (PUCHAR) buf, bufsize, 0);
 	#else
 	static unsigned int seed;
 	static int res;
