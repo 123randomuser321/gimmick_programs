@@ -42,10 +42,10 @@ endif
 
 NAME = dice_roller
 TARGET = $(NAME)$(EXESUFFIX)
-OBJECTS = main.cpp.o randombuf.c.o reshandler.c.o images.o
+SOURCES_C = $(wildcard *.c)
+SOURCES_CPP = $(wildcard *.cpp)
+OBJECTS = $(addsuffix .o,$(SOURCES_C)) $(addsuffix .o,$(SOURCES_CPP)) images.o
 ICONS = $(wildcard data/*.png)
-# this supresses a warning for a circular dependency on the icon
-%: %.o
 
 $(TARGET): $(OBJECTS) Fl
 Fl:
