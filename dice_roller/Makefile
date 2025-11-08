@@ -49,22 +49,29 @@ ICONS = $(wildcard data/*.png)
 
 $(TARGET): $(OBJECTS) Fl
 Fl:
-	$(MAKE) -C Fl PLATFORM=$(PLATFORM) DEBUG=$(DEBUG)
+	@echo " MAKE $@"
+	@$(MAKE) -C Fl PLATFORM=$(PLATFORM) DEBUG=$(DEBUG)
 
 %.cpp.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(DEFINES) -c $^ -o $@
+	@echo " CXX $^"
+	@$(CXX) $(CXXFLAGS) $(DEFINES) -c $^ -o $@
 
 %.c.o: %.c
-	$(CXX) $(CXXFLAGS) $(DEFINES) -c $^ -o $@
+	@echo " CXX $^"
+	@$(CXX) $(CXXFLAGS) $(DEFINES) -c $^ -o $@
 
 main.cpp: images.o
 images.o:
-	$(LD) -o $@ -b binary -r $(ICONS)
+	@echo " LD $(ICONS)"
+	@$(LD) -o $@ -b binary -r $(ICONS)
 
 all: $(TARGET)
-	$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
+	@echo " CXX $^"
+	@$(CXX) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 clean:
-	-rm $(OBJECTS)
-	-rm $(TARGET)
-	$(MAKE) -C Fl clean PLATFORM=$(PLATFORM)
+	@$(MAKE) -C Fl clean PLATFORM=$(PLATFORM)
+	@echo " RM $(OBJECTS)"
+	@-rm $(OBJECTS)
+	@echo " RM $(TARGET)"
+	@-rm $(TARGET)
