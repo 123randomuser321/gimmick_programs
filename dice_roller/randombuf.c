@@ -16,11 +16,6 @@
 	NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
-/*
-	TODO:
-	__WIN32 --> static NULLed bcrypt provider, check in fillrandombug, then set bool to skip, register atexit() for closing provider
-*/
-
 /* What headers? */
 #ifndef NO_SYSTEM_RANDOM
 #ifdef __linux
