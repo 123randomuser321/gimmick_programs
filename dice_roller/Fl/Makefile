@@ -35,11 +35,16 @@ SOURCES = $(wildcard *.cpp)
 OBJECTS = $(addsuffix .o,$(SOURCES))
 
 %.cpp.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $^ -o $@
+	@$(CXX) $(CXXFLAGS) -c $^ -o $@
+	@echo " CXX $^"
 
+# AR seems to write to both stdout and stderr
 staticlib: $(OBJECTS)
-	$(AR) $(ARFLAGS) $(TARGET) $(OBJECTS)
+	@$(AR) $(ARFLAGS) $(TARGET) $(OBJECTS) >/dev/null 2>&1
+	@echo " AR $(TARGET)"
 
 clean:
-	-rm $(OBJECTS)
-	-rm $(TARGET)
+	@-rm $(OBJECTS)
+	@echo " RM $(OBJECTS)"
+	@-rm $(TARGET)
+	@echo " RM $(TARGET)"
