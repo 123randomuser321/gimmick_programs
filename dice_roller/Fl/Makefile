@@ -31,16 +31,13 @@ else
 endif
 
 TARGET = $(LIBPREFIX)Fl$(LIBSUFFIX_STATIC)
-OBJECTS = Fl_Limited_Counter.o
-Fl_Limited_Counter.o: Fl_Limited_Counter.cpp
-Fl_Limited_Counter.cpp: Fl_Limited_Counter.h
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(addsuffix .o,$(SOURCES))
 
-$(TARGET): $(OBJECTS)
-
-%.o: %.cpp
+%.cpp.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $^ -o $@
 
-staticlib: $(TARGET)
+staticlib: $(OBJECTS)
 	$(AR) $(ARFLAGS) $(TARGET) $(OBJECTS)
 
 clean:
